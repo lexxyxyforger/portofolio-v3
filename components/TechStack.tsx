@@ -19,6 +19,8 @@ const stack = [
       { name: "React", level: "Expert" },
       { name: "TypeScript", level: "Advanced" },
       { name: "Tailwind v4", level: "Expert" },
+      { name: "HTML", level: "Expert" },
+      { name: "CSS", level: "Expert" },
       { name: "Framer Motion", level: "Advanced" },
       { name: "Three.js", level: "Intermediate" }
     ]
@@ -27,7 +29,11 @@ const stack = [
     category: "Backend",
     tools: [
       { name: "Node.js", level: "Advanced" },
+      { name: "PHP", level: "Intermediate" },
+      { name: "Python", level: "Intermediate" },
       { name: "PostgreSQL", level: "Intermediate" },
+      { name: "MySQL", level: "Intermediate" },
+      { name: "Supabase", level: "Advanced" },
       { name: "Prisma ORM", level: "Advanced" },
       { name: "GraphQL", level: "Intermediate" },
       { name: "Redis", level: "Intermediate" }

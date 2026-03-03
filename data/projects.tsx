@@ -96,7 +96,25 @@ export const projects: Project[] = [
     category: "Fintech",
     shortDesc: "Market price tracking and trading simulator.",
     fullDesc: "Simulator perdagangan aset digital yang mengambil data harga real-time dari market. User bisa belajar melakukan analisa teknikal sederhana melalui integrasi chart interaktif.",
-    tech: ["JavaScript", "Finnhub API", "Chart.js"],
+    tech: ["TypeScript", "Finnhub API", "Chart.js"],
     screenshots: ["/images/trading2.png", "/images/trading1.png"]
-  }
+  },
+    {
+    id: "11",
+    title: "Playlist Spotify Generator",
+    category: "Entertainment",
+    shortDesc: "Generate custom Spotify playlists based on mood.",
+    fullDesc: "Aplikasi yang memungkinkan pengguna untuk membuat playlist Spotify khusus berdasarkan suasana hati atau genre musik yang diinginkan. Menggunakan API Spotify untuk mengambil data dan mengatur playlist secara otomatis.",
+    tech: ["TypeScript", "Next.js", "Tailwind"],
+    screenshots: ["/images/spotify1.png", "/images/spotify2.png"]
+  },
+    {
+    id: "12",
+    title: "Cv generator",
+    category: "Utility",
+    shortDesc: "Generate professional CVs in seconds.",
+    fullDesc: "Aplikasi yang memungkinkan pengguna untuk membuat CV profesional dalam hitungan detik. Dengan berbagai template dan kemampuan personalisasi, pengguna bisa menghasilkan CV yang menarik dan sesuai dengan kebutuhan pasar kerja.",
+    tech: ["TypeScript", "Next.js", "Tailwind"],
+    screenshots: ["/images/cv1.png", "/images/cv2.png"]
+  },
 ];
