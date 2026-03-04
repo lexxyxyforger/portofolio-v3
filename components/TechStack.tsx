@@ -13,40 +13,95 @@ const fadeInUp: Variants = {
 
 const stack = [
   {
+    category: "Languages",
+    tools: [
+      { name: "JavaScript", level: "Expert" },
+      { name: "TypeScript", level: "Advanced" },
+      { name: "Python", level: "Intermediate" },
+      { name: "PHP", level: "Intermediate" },
+      { name: "Java", level: "Intermediate" },
+      { name: "C", level: "Intermediate" },
+      { name: "C#", level: "Intermediate" },
+      { name: "C++", level: "Intermediate" },
+      { name: "HTML5", level: "Expert" },
+      { name: "CSS3", level: "Expert" }
+    ]
+  },
+  {
     category: "Frontend",
     tools: [
-      { name: "Next.js 16", level: "Expert" },
+      { name: "Next.js", level: "Expert" },
       { name: "React", level: "Expert" },
-      { name: "TypeScript", level: "Advanced" },
+      { name: "React Native", level: "Intermediate" },
+      { name: "Nuxt JS", level: "Intermediate" },
+      { name: "SolidJS", level: "Intermediate" },
       { name: "Tailwind v4", level: "Expert" },
-      { name: "HTML", level: "Expert" },
-      { name: "CSS", level: "Expert" },
+      { name: "SASS", level: "Advanced" },
+      { name: "Semantic UI React", level: "Intermediate" },
       { name: "Framer Motion", level: "Advanced" },
-      { name: "Three.js", level: "Intermediate" }
+      { name: "Three.js", level: "Intermediate" },
+      { name: "Chart.js", level: "Intermediate" },
+      { name: "React Router", level: "Advanced" },
+      { name: "React Hook Form", level: "Advanced" },
+      { name: "Webpack", level: "Intermediate" }
     ]
   },
   {
-    category: "Backend",
+    category: "Backend & APIs",
     tools: [
       { name: "Node.js", level: "Advanced" },
-      { name: "PHP", level: "Intermediate" },
-      { name: "Python", level: "Intermediate" },
-      { name: "PostgreSQL", level: "Intermediate" },
-      { name: "MySQL", level: "Intermediate" },
-      { name: "Supabase", level: "Advanced" },
-      { name: "Prisma ORM", level: "Advanced" },
+      { name: "Express.js", level: "Advanced" },
+      { name: "NestJS", level: "Intermediate" },
+      { name: "Meteor JS", level: "Intermediate" },
+      { name: "Socket.io", level: "Intermediate" },
+      { name: "JWT", level: "Advanced" },
+      { name: "Nodemon", level: "Advanced" },
       { name: "GraphQL", level: "Intermediate" },
-      { name: "Redis", level: "Intermediate" }
+      { name: "Prisma ORM", level: "Advanced" },
+      { name: "Redis", level: "Intermediate" },
+      { name: "NPM", level: "Expert" }
     ]
   },
   {
-    category: "Infrastructure & Tools",
+    category: "Database & BaaS",
+    tools: [
+      { name: "PostgreSQL", level: "Intermediate" },
+      { name: "MySQL", level: "Intermediate" },
+      { name: "MongoDB", level: "Intermediate" },
+      { name: "Supabase", level: "Advanced" }
+    ]
+  },
+  {
+    category: "AI & Data Science",
+    tools: [
+      { name: "TensorFlow", level: "Intermediate" },
+      { name: "PyTorch", level: "Intermediate" },
+      { name: "Keras", level: "Intermediate" },
+      { name: "scikit-learn", level: "Intermediate" },
+      { name: "Pandas", level: "Intermediate" },
+      { name: "NumPy", level: "Intermediate" },
+      { name: "Scipy", level: "Intermediate" },
+      { name: "Plotly", level: "Intermediate" },
+      { name: "Matplotlib", level: "Intermediate" },
+      { name: "mlflow", level: "Intermediate" }
+    ]
+  },
+  {
+    category: "DevOps & Tools",
     tools: [
       { name: "Git / GitHub", level: "Expert" },
+      { name: "GitHub Actions", level: "Advanced" },
       { name: "Docker", level: "Intermediate" },
-      { name: "Vercel / AWS", level: "Advanced" },
+      { name: "Vercel", level: "Advanced" },
+      { name: "Heroku", level: "Intermediate" },
+      { name: "Cisco", level: "Intermediate" },
+      { name: "ESLint", level: "Advanced" },
+      { name: "Prettier", level: "Advanced" },
+      { name: "FFmpeg", level: "Intermediate" },
       { name: "Figma", level: "Advanced" },
-      { name: "Python / AI", level: "Intermediate" }
+      { name: "Adobe Photoshop", level: "Intermediate" },
+      { name: "Canva", level: "Advanced" },
+      { name: "Itch.io", level: "Intermediate" }
     ]
   }
 ];
