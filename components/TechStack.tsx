@@ -221,7 +221,7 @@ export default function TechStack() {
               variants={chipVariant}
               whileHover={{ y: -6, scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 20 }}
-              className="group relative flex items-center gap-4 px-8 py-5 bg-white/[0.02] border border-white/[0.06] rounded-2xl backdrop-blur-sm hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-500 cursor-default"
+              className="group relative flex items-center gap-4 px-8 py-5 bg-white/2 border border-white/6 rounded-2xl backdrop-blur-sm hover:border-white/12 hover:bg-white/4 transition-all duration-500 cursor-default"
             >
               <span className="text-2xl">{item.icon}</span>
               <div>
@@ -249,7 +249,7 @@ export default function TechStack() {
             className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
               activeCategory === null
                 ? 'bg-white text-black border-white'
-                : 'bg-transparent text-zinc-500 border-white/[0.08] hover:border-white/20 hover:text-zinc-300'
+                : 'bg-transparent text-zinc-500 border-white/8 hover:border-white/20 hover:text-zinc-300'
             }`}
           >
             All ({totalTools})
@@ -265,7 +265,7 @@ export default function TechStack() {
                 className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
                   activeCategory === group.category
                     ? 'bg-white text-black border-white'
-                    : 'bg-transparent text-zinc-500 border-white/[0.08] hover:border-white/20 hover:text-zinc-300'
+                    : 'bg-transparent text-zinc-500 border-white/8 hover:border-white/20 hover:text-zinc-300'
                 }`}
               >
                 <span className="mr-1.5">{config?.icon}</span>
@@ -291,12 +291,12 @@ export default function TechStack() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                  className={`group relative rounded-3xl border border-white/[0.06] bg-white/[0.015] backdrop-blur-sm overflow-hidden hover:border-white/[0.12] transition-all duration-700 ${
+                  className={`group relative rounded-3xl border border-white/6 bg-white/1.5 backdrop-blur-sm overflow-hidden hover:border-white/12 transition-all duration-700 ${
                     isLarge ? 'md:col-span-2' : ''
                   }`}
                 >
                   {/* Card glow on hover */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${config.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+                  <div className={`absolute inset-0 bg-linear-to-br ${config.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
                   
                   {/* Accent dot */}
                   <div className={`absolute top-6 right-6 w-2 h-2 rounded-full ${config.glow} opacity-40 group-hover:opacity-100 group-hover:shadow-lg transition-all duration-500`}
@@ -375,8 +375,8 @@ export default function TechStack() {
           className="mt-16 flex justify-center"
         >
           <div className="relative group cursor-default">
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/20 via-violet-500/20 to-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="relative px-8 py-4 bg-white/[0.03] border border-white/[0.08] rounded-full backdrop-blur-md group-hover:border-white/[0.15] transition-all duration-500">
+            <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 via-violet-500/20 to-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative px-8 py-4 bg-white/3 border border-white/8 rounded-full backdrop-blur-md group-hover:border-white/15 transition-all duration-500">
               <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] group-hover:text-zinc-300 transition-colors">
                 Continuous Learning — Innovation — Speed
               </p>

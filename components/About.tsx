@@ -1,15 +1,25 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, Variants, AnimatePresence } from 'framer-motion';
+import { useState, useRef } from 'react';
+import { motion, Variants, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 
 const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 },
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.6, ease: "circOut" } 
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } 
   }
+};
+
+const staggerContainer: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.04 } }
+};
+
+const chipIn: Variants = {
+  hidden: { opacity: 0, scale: 0.85, y: 8 },
+  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }
 };
 
 const techCategories = [
@@ -156,111 +166,252 @@ const filterCategories = ["ALL", "WEB", "AI", "PROG"];
 
 export default function AboutPage() {
   const [activeFilter, setActiveFilter] = useState("ALL");
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, -80]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   const filteredCerts = certificates.filter(cert => 
     activeFilter === "ALL" ? true : cert.category === activeFilter
   );
 
+  const totalTech = techCategories.reduce((acc, cat) => acc + cat.tools.length, 0);
+
   return (
-    <main className="min-h-screen bg-[#050505] text-white pt-32 pb-20 selection:bg-cyan-500/30">
-      <div className="fixed inset-0 pointer-events-none z-99 opacity-[0.03] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+    <main className="min-h-screen bg-[#050505] text-white selection:bg-cyan-500/30 overflow-x-hidden">
+      {/* Ambient Background */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <motion.div
+          animate={{ scale: [1, 1.15, 1], x: [0, 25, 0], y: [0, -15, 0] }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[-10%] right-[-5%] w-150 h-150 bg-cyan-500/4 rounded-full blur-[150px]"
+        />
+        <motion.div
+          animate={{ scale: [1.1, 1, 1.1], x: [0, -25, 0], y: [0, 20, 0] }}
+          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[-10%] left-[-10%] w-125 h-125 bg-purple-500/4 rounded-full blur-[120px]"
+        />
+        <motion.div
+          animate={{ scale: [1, 1.2, 1], y: [0, 25, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[50%] left-[40%] w-100 h-100 bg-violet-500/3 rounded-full blur-[130px]"
+        />
+      </div>
 
-      <div className="max-w-350 mx-auto px-6 lg:px-12">
-        <section className="mb-20">
-          <motion.span 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[10px] tracking-[0.5em] font-black text-cyan-500 uppercase block mb-4"
+      {/* Noise overlay */}
+      <div className="fixed inset-0 pointer-events-none z-99 opacity-[0.015] bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+
+      {/* Hero Section */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center">
+        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="relative z-10 text-center px-6">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-3 px-5 py-2.5 border border-white/8 bg-white/2 backdrop-blur-md rounded-full mb-10"
           >
-            Behind the Code
-          </motion.span>
-          <motion.h1 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-6xl md:text-8xl font-black tracking-tighter italic uppercase leading-none"
+            <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
+            <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.5em]">Behind the Code</span>
+          </motion.div>
+
+          {/* Heading */}
+          <motion.h1
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="text-[clamp(3rem,11vw,10rem)] font-black tracking-tighter italic uppercase leading-[0.85] mb-6"
           >
-            Digital <span className="text-transparent stroke-text">Architect</span>
+            <span className="block bg-linear-to-r from-white via-white to-zinc-500 bg-clip-text text-transparent">
+              Digital
+            </span>
+            <span className="block text-transparent stroke-text relative">
+              Architect
+              <motion.span
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                className="absolute bottom-[15%] left-0 h-0.75 bg-linear-to-r from-cyan-500 to-transparent"
+              />
+            </span>
           </motion.h1>
-        </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 mb-24">
-          <motion.div 
-            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="md:col-span-8 bg-zinc-900/40 border border-white/5 rounded-3xl p-8 md:p-14 backdrop-blur-md relative overflow-hidden group"
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="max-w-xl mx-auto text-zinc-500 text-sm md:text-lg font-medium leading-relaxed"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-cyan-500/5 blur-[80px] group-hover:bg-cyan-500/10 transition-colors" />
-            <h3 className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em] mb-8">The Persona</h3>
-            <p className="text-2xl md:text-4xl font-medium leading-[1.1] tracking-tighter text-zinc-300">
-             Saya adalah seorang <span className="text-white font-bold italic">Fullstack Craftsman</span> yang berdedikasi dalam mengubah kompleksitas menjadi kesederhanaan. Fokus utama saya adalah membangun <span className="text-white">scalable product</span> dengan sentuhan <span className="text-cyan-400 font-black">identitas digital</span> yang mampu memberikan kesan mendalam dan tak terlupakan.
-            </p>
-          </motion.div>
+            Mengubah kompleksitas menjadi kesederhanaan melalui kode, desain, dan arsitektur digital yang berkesan.
+          </motion.p>
+        </motion.div>
 
-          <motion.div 
-            variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-            className="md:col-span-4 bg-cyan-500 rounded-3xl p-8 flex flex-col justify-between text-[#050505] shadow-[0_0_50px_-10px_rgba(6,182,212,0.3)]"
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        >
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            className="flex flex-col items-center gap-3"
           >
-            <div className="text-5xl font-black italic tracking-tighter leading-[0.8]">VOL.<br/>2026</div>
-            <div className="pt-10 border-t border-[#050505]/10">
-              <p className="text-[11px] font-black uppercase tracking-widest leading-relaxed">
-                Currently based in north Jakarta, ID.<br/>Available for high-end digital crafts.
-              </p>
-            </div>
+            <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.4em]">Scroll</span>
+            <div className="w-px h-8 bg-linear-to-b from-zinc-600 to-transparent" />
           </motion.div>
-        </div>
+        </motion.div>
+      </section>
 
-        {/* Section: Journey & Education */}
-        <section className="mb-24 grid grid-cols-1 md:grid-cols-2 gap-12">
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="space-y-8">
-                <h3 className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em]">Foundation</h3>
-                <div className="relative pl-8 border-l border-white/10">
-                    <div className="absolute top-0 -left-1 w-2 h-2 rounded-full bg-cyan-500" />
-                    <h4 className="text-xl font-bold italic uppercase tracking-tighter">Information Systems Degree</h4>
-                    <p className="text-zinc-500 text-sm mt-1 font-mono uppercase tracking-widest">Media Nusantara University — 2023 - 2027</p>
-                    <p className="text-zinc-400 mt-4 text-sm leading-relaxed max-w-sm">
-                        Berfokus pada pengembangan sistem informasi, manajemen data, serta perancangan dan implementasi solusi teknologi berskala besar.
-                    </p>
-                </div>
-            </motion.div>
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
 
-            <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="space-y-8">
-                <h3 className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em]">Current Status</h3>
-                <div className="p-8 bg-zinc-900/30 border border-white/5 rounded-3xl">
-                    <p className="text-zinc-400 text-sm italic font-medium">
-                        &quot;Saat ini saya berdomisili di kawasan Jakarta Utara. Saya kerap mengunjungi coworking space untuk mencari inspirasi maupun mengerjakan proyek-proyek terbaru dengan memanfaatkan teknologi mutakhir.&quot;
-                    </p>
-                </div>
-            </motion.div>
-        </section>
-
-        {/* Tech Arsenal */}
-        <section className="mb-24">
-          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="mb-14">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-8">
-              <div>
-                <h3 className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Tech Arsenal</h3>
-                <h2 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter">
-                  Tools & <span className="text-transparent stroke-text">Technologies</span>
-                </h2>
-                <p className="text-zinc-500 text-xs font-medium mt-4 max-w-lg">
-                  Perangkat dan teknologi yang saya gunakan untuk mendorong batas kemampuan di setiap baris kode.
+        {/* ═══ Persona Bento Grid ═══ */}
+        <section className="mb-32">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-5">
+            {/* Main persona text */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="md:col-span-8 relative group rounded-3xl border border-white/6 bg-white/2 backdrop-blur-md p-8 md:p-12 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-linear-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative z-10">
+                <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.4em] font-black text-cyan-500 uppercase mb-8">
+                  <span className="w-6 h-px bg-cyan-500/50" />
+                  The Persona
+                </span>
+                <p className="text-xl md:text-2xl lg:text-3xl font-medium leading-[1.2] tracking-tight text-zinc-300">
+                  Saya adalah seorang <span className="text-white font-bold italic">Fullstack Craftsman</span> yang berdedikasi dalam mengubah kompleksitas menjadi kesederhanaan. Fokus utama saya adalah membangun <span className="text-white">scalable product</span> dengan sentuhan <span className="text-cyan-400 font-black">identitas digital</span> yang mampu memberikan kesan mendalam dan tak terlupakan.
                 </p>
               </div>
-              <div className="flex items-center gap-3 px-5 py-2.5 bg-zinc-900/40 border border-white/5 rounded-full">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{techCategories.reduce((acc, cat) => acc + cat.tools.length, 0)}+ Technologies</span>
+            </motion.div>
+
+            {/* VOL card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.7 }}
+              className="md:col-span-4 bg-cyan-500 rounded-3xl p-8 flex flex-col justify-between text-[#050505] shadow-[0_0_60px_-10px_rgba(6,182,212,0.3)] group hover:shadow-[0_0_80px_-10px_rgba(6,182,212,0.4)] transition-shadow duration-700"
+            >
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                transition={{ type: "spring", stiffness: 300 }}
+                className="text-5xl md:text-6xl font-black italic tracking-tighter leading-[0.8]"
+              >
+                VOL.<br/>2026
+              </motion.div>
+              <div className="pt-8 border-t border-[#050505]/10 mt-6">
+                <p className="text-[11px] font-black uppercase tracking-widest leading-relaxed">
+                  Currently based in north Jakarta, ID.<br/>Available for high-end digital crafts.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Education card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.15, duration: 0.7 }}
+              className="md:col-span-5 relative group rounded-3xl border border-violet-500/15 bg-white/2 backdrop-blur-md p-8 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-linear-to-br from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative z-10">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-violet-500/10 border border-violet-500/20 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-violet-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                  </div>
+                  <span className="text-[10px] tracking-[0.3em] font-black text-violet-400 uppercase">Foundation</span>
+                </div>
+                <h4 className="text-xl font-bold italic uppercase tracking-tighter mb-2">Information Systems Degree</h4>
+                <p className="text-zinc-500 text-sm font-mono uppercase tracking-widest mb-4">Media Nusantara University — 2023 - 2027</p>
+                <p className="text-zinc-400 text-sm leading-relaxed">
+                  Berfokus pada pengembangan sistem informasi, manajemen data, serta perancangan dan implementasi solusi teknologi berskala besar.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Quote card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.7 }}
+              className="md:col-span-4 relative group rounded-3xl border border-white/6 bg-white/2 backdrop-blur-md p-8 flex items-center overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-linear-to-br from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="relative z-10">
+                <svg className="w-8 h-8 text-zinc-700 mb-4" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M4.583 17.321C3.553 16.227 3 15 3 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C9.591 11.68 11 13.169 11 15c0 1.933-1.567 3.5-3.5 3.5-1.289 0-2.456-.562-2.917-1.179zM16.583 17.321C15.553 16.227 15 15 15 13.011c0-3.5 2.457-6.637 6.03-8.188l.893 1.378c-3.335 1.804-3.987 4.145-4.247 5.621.537-.278 1.24-.375 1.929-.311C21.591 11.68 23 13.169 23 15c0 1.933-1.567 3.5-3.5 3.5-1.289 0-2.456-.562-2.917-1.179z"/>
+                </svg>
+                <p className="text-zinc-400 text-sm italic font-medium leading-relaxed">
+                  Saat ini saya berdomisili di kawasan Jakarta Utara. Saya kerap mengunjungi coworking space untuk mencari inspirasi maupun mengerjakan proyek-proyek terbaru.
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Availability card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.25, duration: 0.7 }}
+              className="md:col-span-3 relative group rounded-3xl border border-emerald-500/20 bg-emerald-500/5 backdrop-blur-md p-8 flex flex-col justify-center overflow-hidden"
+            >
+              <div className="flex items-center gap-2.5 mb-4">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+                </span>
+                <span className="text-[10px] font-black text-emerald-400 uppercase tracking-widest">Available</span>
+              </div>
+              <p className="text-zinc-400 text-xs font-bold uppercase tracking-wider leading-relaxed">
+                Open for freelance, collaboration & full-time opportunities.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ═══ Tech Arsenal ═══ */}
+        <section className="mb-32">
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
+            <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.5em] font-black text-cyan-500 uppercase mb-5">
+              <span className="w-8 h-px bg-cyan-500/50" />
+              Tech Arsenal
+              <span className="w-8 h-px bg-cyan-500/50" />
+            </span>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black italic uppercase tracking-tighter leading-[0.9] mb-4">
+              Tools & <span className="text-transparent stroke-text">Technologies</span>
+            </h2>
+            <p className="text-zinc-500 text-sm max-w-lg mx-auto">
+              Perangkat dan teknologi yang saya gunakan untuk mendorong batas kemampuan di setiap baris kode.
+            </p>
+            <div className="flex items-center justify-center gap-3 mt-6">
+              <div className="px-4 py-2 bg-white/2 border border-white/6 rounded-full">
+                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{totalTech}+ Technologies</span>
+              </div>
+              <div className="px-4 py-2 bg-white/2 border border-white/6 rounded-full">
+                <span className="text-[10px] font-black text-zinc-400 uppercase tracking-widest">{techCategories.length} Categories</span>
               </div>
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {techCategories.map((category, catIdx) => {
-              const colorMap: Record<string, { border: string; accent: string; bg: string; glow: string; hoverBorder: string }> = {
-                cyan: { border: 'border-cyan-500/20', accent: 'text-cyan-400', bg: 'bg-cyan-500/10', glow: 'rgba(6,182,212,0.08)', hoverBorder: 'rgba(6,182,212,0.4)' },
-                blue: { border: 'border-blue-500/20', accent: 'text-blue-400', bg: 'bg-blue-500/10', glow: 'rgba(59,130,246,0.08)', hoverBorder: 'rgba(59,130,246,0.4)' },
-                emerald: { border: 'border-emerald-500/20', accent: 'text-emerald-400', bg: 'bg-emerald-500/10', glow: 'rgba(16,185,129,0.08)', hoverBorder: 'rgba(16,185,129,0.4)' },
-                orange: { border: 'border-orange-500/20', accent: 'text-orange-400', bg: 'bg-orange-500/10', glow: 'rgba(249,115,22,0.08)', hoverBorder: 'rgba(249,115,22,0.4)' },
-                violet: { border: 'border-violet-500/20', accent: 'text-violet-400', bg: 'bg-violet-500/10', glow: 'rgba(139,92,246,0.08)', hoverBorder: 'rgba(139,92,246,0.4)' },
-                rose: { border: 'border-rose-500/20', accent: 'text-rose-400', bg: 'bg-rose-500/10', glow: 'rgba(244,63,94,0.08)', hoverBorder: 'rgba(244,63,94,0.4)' },
+              const colorMap: Record<string, { border: string; accent: string; bg: string; glowColor: string; gradient: string }> = {
+                cyan: { border: 'border-cyan-500/15', accent: 'text-cyan-400', bg: 'bg-cyan-500/10', glowColor: 'rgba(6,182,212,0.06)', gradient: 'from-cyan-500/8 to-transparent' },
+                blue: { border: 'border-blue-500/15', accent: 'text-blue-400', bg: 'bg-blue-500/10', glowColor: 'rgba(59,130,246,0.06)', gradient: 'from-blue-500/8 to-transparent' },
+                emerald: { border: 'border-emerald-500/15', accent: 'text-emerald-400', bg: 'bg-emerald-500/10', glowColor: 'rgba(16,185,129,0.06)', gradient: 'from-emerald-500/8 to-transparent' },
+                orange: { border: 'border-orange-500/15', accent: 'text-orange-400', bg: 'bg-orange-500/10', glowColor: 'rgba(249,115,22,0.06)', gradient: 'from-orange-500/8 to-transparent' },
+                violet: { border: 'border-violet-500/15', accent: 'text-violet-400', bg: 'bg-violet-500/10', glowColor: 'rgba(139,92,246,0.06)', gradient: 'from-violet-500/8 to-transparent' },
+                rose: { border: 'border-rose-500/15', accent: 'text-rose-400', bg: 'bg-rose-500/10', glowColor: 'rgba(244,63,94,0.06)', gradient: 'from-rose-500/8 to-transparent' },
               };
               const c = colorMap[category.color] || colorMap.cyan;
 
@@ -270,59 +421,53 @@ export default function AboutPage() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: catIdx * 0.08, duration: 0.5 }}
-                  className={`group relative bg-zinc-900/40 border ${c.border} rounded-2xl p-7 backdrop-blur-md overflow-hidden hover:scale-[1.01] transition-all duration-500`}
-                  style={{ boxShadow: `0 0 40px -10px ${c.glow}` }}
+                  transition={{ delay: catIdx * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className={`group relative rounded-3xl border ${c.border} bg-white/2 backdrop-blur-md p-7 overflow-hidden hover:border-opacity-40 transition-all duration-700`}
                 >
-                  {/* Background glow */}
-                  <div 
-                    className="absolute -top-16 -right-16 w-40 h-40 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-700"
-                    style={{ backgroundColor: c.glow }}
-                  />
+                  {/* Hover glow */}
+                  <div className={`absolute inset-0 bg-linear-to-br ${c.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
 
                   {/* Header */}
                   <div className="flex items-center justify-between mb-6 relative z-10">
-                    <div className="flex items-center gap-3">
-                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${c.bg} ${c.accent} text-[9px] font-black uppercase tracking-widest rounded-full`}>
-                        <span className="w-1.5 h-1.5 rounded-full bg-current" />
-                        {category.name}
-                      </span>
-                    </div>
-                    <span className="text-zinc-700 font-mono text-[10px]">{category.tools.length} tools</span>
+                    <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 ${c.bg} ${c.accent} text-[9px] font-black uppercase tracking-widest rounded-full`}>
+                      <span className="w-1.5 h-1.5 rounded-full bg-current" />
+                      {category.name}
+                    </span>
+                    <span className="text-zinc-700 font-mono text-[10px]">{category.tools.length}</span>
                   </div>
 
-                  {/* Tools grid */}
-                  <div className="grid grid-cols-2 gap-2 relative z-10">
-                    {category.tools.map((tool, toolIdx) => (
+                  {/* Tools as flowing chips */}
+                  <motion.div
+                    variants={staggerContainer}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true }}
+                    className="flex flex-wrap gap-1.5 relative z-10"
+                  >
+                    {category.tools.map((tool) => (
                       <motion.div
                         key={tool.name}
-                        initial={{ opacity: 0 }}
-                        whileInView={{ opacity: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: catIdx * 0.05 + toolIdx * 0.02 }}
-                        whileHover={{ 
-                          y: -2, 
-                          borderColor: c.hoverBorder,
-                          backgroundColor: c.glow,
-                        }}
-                        className="flex items-center gap-2.5 px-3 py-2.5 bg-white/2 border border-white/5 rounded-xl transition-all duration-300 group/tool cursor-default"
+                        variants={chipIn}
+                        whileHover={{ scale: 1.06, y: -2 }}
+                        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                        className="inline-flex items-center gap-2 px-3 py-2 bg-white/3 border border-white/6 rounded-xl hover:bg-white/6 hover:border-white/12 transition-all duration-300 cursor-default group/tool"
                       >
-                        <svg className={`w-4 h-4 shrink-0 text-zinc-600 group-hover/tool:${c.accent.replace('text-', 'text-')} transition-colors duration-300`} viewBox="0 0 24 24" fill="none" style={{ color: 'inherit' }}>
+                        <svg className={`w-3.5 h-3.5 shrink-0 text-zinc-600 group-hover/tool:${c.accent.split('-')[1] === 'cyan' ? 'text-cyan-400' : c.accent} transition-colors duration-300`} viewBox="0 0 24 24" fill="none">
                           {tool.icon}
                         </svg>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 group-hover/tool:text-white transition-colors duration-300 truncate">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-500 group-hover/tool:text-zinc-200 transition-colors duration-300">
                           {tool.name}
                         </span>
                       </motion.div>
                     ))}
-                  </div>
+                  </motion.div>
 
                   {/* Bottom accent line */}
                   <div className="mt-5 relative z-10">
-                    <div className="h-px bg-white/5 w-full relative overflow-hidden">
-                      <div 
-                        className="absolute inset-y-0 left-0 w-0 group-hover:w-full transition-all duration-1000"
-                        style={{ backgroundColor: c.hoverBorder }}
+                    <div className="h-px bg-white/5 w-full relative overflow-hidden rounded-full">
+                      <motion.div
+                        className="absolute inset-y-0 left-0 w-0 group-hover:w-full transition-all duration-1000 rounded-full"
+                        style={{ backgroundColor: c.glowColor.replace('0.06', '0.4') }}
                       />
                     </div>
                   </div>
@@ -332,125 +477,160 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Section: Milestones with Filter */}
-        <section className="mb-24">
-            <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-              <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-left">
-                <h3 className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em] mb-2">Milestones</h3>
-                <h2 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter">Validated <span className="text-transparent stroke-text">Certificates</span></h2>
-                <p className="text-zinc-500 text-xs font-medium mt-4 max-w-md">Kumpulan sertifikasi profesional yang telah diperoleh sepanjang perjalanan pengembangan karir di bidang teknologi.</p>
-              </motion.div>
-              
-              {/* Filter Buttons */}
-              <div className="flex flex-wrap gap-2">
-                {filterCategories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveFilter(cat)}
-                    className={`px-5 py-2 text-[10px] font-black uppercase tracking-widest border transition-all duration-300 rounded-full ${
-                      activeFilter === cat 
-                      ? 'bg-cyan-500 border-cyan-500 text-black scale-105' 
-                      : 'border-white/10 text-zinc-500 hover:border-white/30 hover:text-zinc-300'
-                    }`}
+        {/* ═══ Certificates ═══ */}
+        <section className="mb-32">
+          <motion.div variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }} className="text-center mb-16">
+            <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.5em] font-black text-cyan-500 uppercase mb-5">
+              <span className="w-8 h-px bg-cyan-500/50" />
+              Milestones
+              <span className="w-8 h-px bg-cyan-500/50" />
+            </span>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black italic uppercase tracking-tighter leading-[0.9] mb-4">
+              Validated <span className="text-transparent stroke-text">Certificates</span>
+            </h2>
+            <p className="text-zinc-500 text-sm max-w-md mx-auto">
+              Kumpulan sertifikasi profesional yang telah diperoleh sepanjang perjalanan pengembangan karir di bidang teknologi.
+            </p>
+          </motion.div>
+
+          {/* Filter pills */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap justify-center gap-2 mb-12"
+          >
+            {filterCategories.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setActiveFilter(cat)}
+                className={`px-5 py-2.5 text-[10px] font-black uppercase tracking-widest border transition-all duration-300 rounded-full ${
+                  activeFilter === cat 
+                  ? 'bg-white border-white text-black scale-105' 
+                  : 'border-white/8 text-zinc-500 hover:border-white/20 hover:text-zinc-300'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <AnimatePresence mode="popLayout">
+              {filteredCerts.map((cert, i) => {
+                const colors = categoryColors[cert.category] || categoryColors.WEB;
+                return (
+                  <motion.div 
+                    key={cert.title}
+                    layout
+                    initial={{ opacity: 0, y: 30, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9, y: -10 }}
+                    transition={{ duration: 0.4, delay: i * 0.05, ease: [0.16, 1, 0.3, 1] }}
+                    className={`group relative rounded-3xl border ${colors.border} bg-white/2 backdrop-blur-md p-7 overflow-hidden hover:scale-[1.02] transition-all duration-500 ${colors.glow}`}
                   >
-                    {cat}
-                  </button>
-                ))}
-              </div>
-            </div>
+                    {/* Corner accents */}
+                    <div className={`absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 ${colors.border} rounded-tl-2xl opacity-40 group-hover:opacity-80 transition-opacity`} />
+                    <div className={`absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 ${colors.border} rounded-br-2xl opacity-40 group-hover:opacity-80 transition-opacity`} />
+                    
+                    {/* Background glow */}
+                    <div className={`absolute -top-10 -right-10 w-32 h-32 ${colors.bg} blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
+                    
+                    {/* Top: badge + date */}
+                    <div className="flex items-center justify-between mb-6 relative z-10">
+                      <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${colors.bg} ${colors.text} text-[9px] font-black uppercase tracking-widest rounded-full border ${colors.border}`}>
+                        <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                        {cert.category}
+                      </span>
+                      <span className="text-zinc-600 font-mono text-[10px] tracking-wider">{cert.date}</span>
+                    </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-              <AnimatePresence mode='popLayout'>
-                {filteredCerts.map((cert, i) => {
-                    const colors = categoryColors[cert.category] || categoryColors.WEB;
-                    return (
-                    <motion.div 
-                        key={cert.title}
-                        layout
-                        initial={{ opacity: 0, y: 30, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                        transition={{ duration: 0.4, delay: i * 0.05 }}
-                        className={`group relative bg-zinc-900/40 border ${colors.border} rounded-2xl p-7 backdrop-blur-md overflow-hidden hover:scale-[1.02] transition-all duration-500 ${colors.glow}`}
-                    >
-                        {/* Decorative corner accents */}
-                        <div className={`absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 ${colors.border} rounded-tl-2xl opacity-60`} />
-                        <div className={`absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 ${colors.border} rounded-br-2xl opacity-60`} />
-                        
-                        {/* Background glow effect */}
-                        <div className={`absolute -top-10 -right-10 w-32 h-32 ${colors.bg} blur-[60px] opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
-                        
-                        {/* Top row: category badge + date */}
-                        <div className="flex items-center justify-between mb-6 relative z-10">
-                          <span className={`inline-flex items-center gap-1.5 px-3 py-1 ${colors.bg} ${colors.text} text-[9px] font-black uppercase tracking-widest rounded-full border ${colors.border}`}>
-                            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-                            {cert.category}
-                          </span>
-                          <span className="text-zinc-600 font-mono text-[10px] tracking-wider">{cert.date}</span>
+                    {/* Icon */}
+                    <div className={`${colors.text} opacity-20 group-hover:opacity-60 transition-opacity duration-500 mb-5 relative z-10`}>
+                      {categoryIcons[cert.category]}
+                    </div>
+
+                    {/* Title */}
+                    <h4 className="text-lg font-bold uppercase italic tracking-tighter leading-tight text-zinc-200 group-hover:text-white transition-colors duration-300 mb-4 relative z-10">
+                      {cert.title}
+                    </h4>
+
+                    {/* Divider */}
+                    <div className="relative z-10 mb-4">
+                      <div className="h-px bg-white/5 w-full relative overflow-hidden">
+                        <div className={`h-px ${colors.bg} w-0 group-hover:w-full transition-all duration-700 absolute inset-0`} />
+                      </div>
+                    </div>
+
+                    {/* Footer: issuer + ID */}
+                    <div className="flex items-center justify-between relative z-10">
+                      <div className="flex items-center gap-2">
+                        <div className={`w-5 h-5 rounded-full ${colors.bg} flex items-center justify-center`}>
+                          <svg className={`w-3 h-3 ${colors.text}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                          </svg>
                         </div>
-
-                        {/* Icon */}
-                        <div className={`${colors.text} opacity-30 group-hover:opacity-70 transition-opacity duration-500 mb-5 relative z-10`}>
-                          {categoryIcons[cert.category]}
-                        </div>
-
-                        {/* Title */}
-                        <h4 className="text-lg font-bold uppercase italic tracking-tighter leading-tight text-zinc-200 group-hover:text-white transition-colors duration-300 mb-4 relative z-10">
-                          {cert.title}
-                        </h4>
-
-                        {/* Divider */}
-                        <div className="relative z-10 mb-4">
-                          <div className="h-px bg-white/5 w-full" />
-                          <div className={`h-px ${colors.bg} w-0 group-hover:w-full transition-all duration-700 -mt-px`} />
-                        </div>
-
-                        {/* Footer: issuer + cert ID */}
-                        <div className="flex items-center justify-between relative z-10">
-                          <div className="flex items-center gap-2">
-                            <div className={`w-5 h-5 rounded-full ${colors.bg} flex items-center justify-center`}>
-                              <svg className={`w-3 h-3 ${colors.text}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                                <polyline points="22 4 12 14.01 9 11.01" />
-                              </svg>
-                            </div>
-                            <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{cert.issuer}</span>
-                          </div>
-                          <span className="text-[8px] text-zinc-700 font-mono tracking-wider">{cert.id}</span>
-                        </div>
-                    </motion.div>
-                    );
-                })}
-              </AnimatePresence>
-            </div>
+                        <span className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest">{cert.issuer}</span>
+                      </div>
+                      <span className="text-[8px] text-zinc-700 font-mono tracking-wider">{cert.id}</span>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
         </section>
 
-        <motion.div 
-          variants={fadeInUp} initial="hidden" whileInView="visible" viewport={{ once: true }}
-          className="md:col-span-12 bg-zinc-900/50 border border-white/5 rounded-3xl p-10 flex items-center justify-center group relative overflow-hidden mb-24"
+        {/* ═══ Signature Quote ═══ */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative group rounded-3xl border border-white/6 bg-white/2 backdrop-blur-md p-12 md:p-16 flex items-center justify-center overflow-hidden mb-32"
         >
-          <div className="absolute inset-0 bg-linear-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-          <h4 className="text-xl md:text-3xl font-black italic uppercase tracking-tighter text-center group-hover:scale-105 transition-transform duration-500">
-            &quot;Simple is the ultimate sophistication.&quot;
-          </h4>
+          <div className="absolute inset-0 bg-linear-to-r from-cyan-500/5 via-transparent to-violet-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+          <div className="relative z-10 text-center">
+            <motion.h4
+              whileHover={{ scale: 1.03 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="text-xl md:text-3xl lg:text-4xl font-black italic uppercase tracking-tighter"
+            >
+              &quot;Simple is the ultimate sophistication.&quot;
+            </motion.h4>
+          </div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="mt-24 text-center">
-          <p className="text-zinc-600 font-mono text-[10px] mb-10 tracking-[0.4em] uppercase">READY TO COLLABORATE?</p>
+        {/* ═══ CTA ═══ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="pb-20 text-center"
+        >
+          <p className="text-zinc-600 font-mono text-[10px] mb-10 tracking-[0.4em] uppercase">Ready to collaborate?</p>
           <a 
             href="https://github.com/username-lo" 
             target="_blank"
             rel="noopener noreferrer"
-            className="group relative inline-flex items-center gap-6 px-16 py-8 bg-white text-black font-black text-xs uppercase tracking-[0.2em] hover:bg-cyan-400 transition-all rounded-full shadow-[0_20px_40px_-10px_rgba(255,255,255,0.1)]"
+            className="group relative inline-flex items-center gap-6"
           >
-            <span className="relative z-10 italic">Explore GitHub Archive</span>
-            <div className="absolute inset-0 bg-cyan-400 rounded-full translate-x-3 translate-y-3 -z-10 group-hover:translate-x-0 group-hover:translate-y-0 transition-transform" />
+            <motion.div
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="relative px-14 py-7 bg-white text-black font-black text-xs uppercase tracking-[0.2em] rounded-full shadow-[0_20px_50px_-10px_rgba(255,255,255,0.1)] group-hover:shadow-[0_25px_60px_-10px_rgba(6,182,212,0.3)] transition-shadow duration-500 overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-cyan-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative z-10 italic">Explore GitHub Archive</span>
+            </motion.div>
           </a>
         </motion.div>
       </div>
 
       <style jsx global>{`
-        .stroke-text { -webkit-text-stroke: 1.5px rgba(255,255,255,0.2); }
+        .stroke-text { -webkit-text-stroke: 2px rgba(255,255,255,0.15); }
       `}</style>
     </main>
   );

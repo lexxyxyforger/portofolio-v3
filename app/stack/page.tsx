@@ -38,17 +38,17 @@ export default function StackPage() {
         <motion.div
           animate={{ scale: [1, 1.2, 1], x: [0, 30, 0], y: [0, -20, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[-15%] right-[-5%] w-[600px] h-[600px] bg-cyan-500/[0.04] rounded-full blur-[150px]"
+          className="absolute top-[-15%] right-[-5%] w-150 h-150 bg-cyan-500/4 rounded-full blur-[150px]"
         />
         <motion.div
           animate={{ scale: [1.2, 1, 1.2], x: [0, -30, 0], y: [0, 20, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-purple-500/[0.04] rounded-full blur-[150px]"
+          className="absolute bottom-[-10%] left-[-10%] w-125 h-125 bg-purple-500/4 rounded-full blur-[150px]"
         />
         <motion.div
           animate={{ scale: [1, 1.15, 1], y: [0, 30, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-[40%] left-[30%] w-[400px] h-[400px] bg-violet-500/[0.03] rounded-full blur-[130px]"
+          className="absolute top-[40%] left-[30%] w-100 h-100 bg-violet-500/3 rounded-full blur-[130px]"
         />
       </div>
 
@@ -68,7 +68,7 @@ export default function StackPage() {
               <motion.div
                 animate={{ y: [0, -12, 0], rotate: [0, 2, -2, 0] }}
                 transition={{ duration: 5 + i * 0.8, repeat: Infinity, ease: "easeInOut" }}
-                className="px-3 py-1.5 border border-white/[0.06] bg-white/[0.02] backdrop-blur-sm rounded-full"
+                className="px-3 py-1.5 border border-white/6 bg-white/2 backdrop-blur-sm rounded-full"
               >
                 <span className="text-[10px] font-bold text-zinc-600 tracking-wider">{tag.label}</span>
               </motion.div>
@@ -82,7 +82,7 @@ export default function StackPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-3 px-5 py-2.5 border border-white/[0.08] bg-white/[0.02] backdrop-blur-md rounded-full mb-10"
+            className="inline-flex items-center gap-3 px-5 py-2.5 border border-white/8 bg-white/2 backdrop-blur-md rounded-full mb-10"
           >
             <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
             <span className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.5em]">
@@ -97,7 +97,7 @@ export default function StackPage() {
             transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           >
             <h1 className="text-[clamp(3rem,12vw,11rem)] font-black tracking-tighter italic uppercase leading-[0.85] mb-6">
-              <span className="block bg-gradient-to-r from-white via-white to-zinc-500 bg-clip-text text-transparent">
+              <span className="block bg-linear-to-r from-white via-white to-zinc-500 bg-clip-text text-transparent">
                 The
               </span>
               <span className="block text-transparent stroke-text relative">
@@ -106,7 +106,7 @@ export default function StackPage() {
                   initial={{ width: 0 }}
                   animate={{ width: "100%" }}
                   transition={{ duration: 1.2, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="absolute bottom-[15%] left-0 h-[3px] bg-gradient-to-r from-cyan-500 to-transparent"
+                  className="absolute bottom-[15%] left-0 h-0.75 bg-linear-to-r from-cyan-500 to-transparent"
                 />
               </span>
             </h1>
@@ -134,9 +134,9 @@ export default function StackPage() {
                 key={i}
                 whileHover={{ scale: 1.05, y: -4 }}
                 transition={{ type: "spring", stiffness: 400, damping: 15 }}
-                className="group relative px-8 py-5 bg-white/[0.02] border border-white/[0.06] rounded-2xl backdrop-blur-sm hover:border-white/[0.12] transition-colors cursor-default"
+                className="group relative px-8 py-5 bg-white/2 border border-white/6 rounded-2xl backdrop-blur-sm hover:border-white/12 transition-colors cursor-default"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-0 group-hover:opacity-[0.06] rounded-2xl transition-opacity duration-500`} />
+                <div className={`absolute inset-0 bg-linear-to-br ${stat.color} opacity-0 group-hover:opacity-[0.06] rounded-2xl transition-opacity duration-500`} />
                 <div className="relative z-10">
                   <div className="text-3xl md:text-4xl font-black italic tracking-tighter text-white mb-1">
                     {stat.value}
@@ -163,7 +163,7 @@ export default function StackPage() {
             className="flex flex-col items-center gap-3"
           >
             <span className="text-[8px] font-black text-zinc-600 uppercase tracking-[0.4em]">Scroll</span>
-            <div className="w-px h-8 bg-gradient-to-b from-zinc-600 to-transparent" />
+            <div className="w-px h-8 bg-linear-to-b from-zinc-600 to-transparent" />
           </motion.div>
         </motion.div>
       </section>
