@@ -3,27 +3,27 @@
 import { motion, Variants } from 'framer-motion';
 import { useState } from 'react';
 
-// Lightweight fade-in — no spring, short duration
 const fadeInUp: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 30 },
   visible: { 
     opacity: 1, 
     y: 0, 
-    transition: { duration: 0.45, ease: [0.25, 0.46, 0.45, 0.94] } 
+    transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } 
   }
 };
 
 const staggerContainer: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.03 } }
+  visible: { transition: { staggerChildren: 0.05 } }
 };
 
 const chipVariant: Variants = {
-  hidden: { opacity: 0, y: 8 },
+  hidden: { opacity: 0, scale: 0.8, y: 10 },
   visible: { 
     opacity: 1, 
+    scale: 1, 
     y: 0,
-    transition: { duration: 0.3, ease: 'easeOut' }
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
   }
 };
 
@@ -179,54 +179,56 @@ export default function TechStack() {
   const totalTools = stack.reduce((acc, g) => acc + g.tools.length, 0);
 
   return (
-    <section className="py-16 md:py-24 lg:py-32 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+    <section className="py-20 md:py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12 relative z-10">
         
-        {/* Section Header */}
-        <div className="text-center mb-12 md:mb-20">
+        {/* Section Header  */}
+        <div className="text-center mb-20">
           <motion.div 
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-80px" }}
+            viewport={{ once: true }}
             variants={fadeInUp}
           >
-            <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.5em] font-black text-cyan-500 uppercase mb-4 md:mb-6">
-              <span className="w-6 md:w-8 h-px bg-cyan-500/50" />
+            <span className="inline-flex items-center gap-2 text-[10px] tracking-[0.5em] font-black text-cyan-500 uppercase mb-6">
+              <span className="w-8 h-px bg-cyan-500/50" />
               My Arsenal
-              <span className="w-6 md:w-8 h-px bg-cyan-500/50" />
+              <span className="w-8 h-px bg-cyan-500/50" />
             </span>
-            <h2 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter italic uppercase leading-[0.9] mb-4 md:mb-6">
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter italic uppercase leading-[0.9] mb-6">
               The Tech{' '}
               <span className="text-transparent stroke-text">Behind</span>
               <br />
               The Magic
             </h2>
-            <p className="text-zinc-500 text-xs sm:text-sm md:text-base max-w-xl mx-auto leading-relaxed px-2">
+            <p className="text-zinc-500 text-sm md:text-base max-w-xl mx-auto leading-relaxed">
               Selalu bereksperimen dengan teknologi terbaru untuk performa maksimal dan user experience yang luar biasa.
             </p>
           </motion.div>
         </div>
 
-        {/* Highlights — CSS grid, no whileHover JS */}
+        {/* Highlights - Horizontal scroll on mobile */}
         <motion.div 
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-60px" }}
+          viewport={{ once: true }}
           variants={staggerContainer}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 mb-12 md:mb-20"
+          className="flex flex-wrap justify-center gap-4 mb-20"
         >
           {highlights.map((item, i) => (
             <motion.div
               key={i}
               variants={chipVariant}
-              className="group relative flex items-center gap-3 md:gap-4 px-4 sm:px-6 md:px-8 py-4 md:py-5 bg-white/[0.02] border border-white/[0.06] rounded-2xl hover:border-white/[0.12] hover:bg-white/[0.04] transition-all duration-300 cursor-default"
+              whileHover={{ y: -6, scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 20 }}
+              className="group relative flex items-center gap-4 px-8 py-5 bg-white/2 border border-white/6 rounded-2xl backdrop-blur-sm hover:border-white/12 hover:bg-white/4 transition-all duration-500 cursor-default"
             >
-              <span className="text-lg md:text-2xl">{item.icon}</span>
+              <span className="text-2xl">{item.icon}</span>
               <div>
-                <div className="text-xl sm:text-2xl md:text-3xl font-black italic tracking-tighter text-white">
+                <div className="text-2xl md:text-3xl font-black italic tracking-tighter text-white">
                   {item.value}
                 </div>
-                <div className="text-[8px] md:text-[9px] font-bold text-zinc-500 uppercase tracking-[0.15em] md:tracking-[0.2em]">
+                <div className="text-[9px] font-bold text-zinc-500 uppercase tracking-[0.2em]">
                   {item.label}
                 </div>
               </div>
@@ -236,18 +238,18 @@ export default function TechStack() {
 
         {/* Category Filter Pills */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.4 }}
-          className="flex flex-wrap justify-center gap-1.5 sm:gap-2 mb-10 md:mb-16 px-1"
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-wrap justify-center gap-2 mb-16"
         >
           <button
             onClick={() => setActiveCategory(null)}
-            className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all duration-200 border ${
+            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
               activeCategory === null
                 ? 'bg-white text-black border-white'
-                : 'bg-transparent text-zinc-500 border-white/[0.08] hover:border-white/20 hover:text-zinc-300'
+                : 'bg-transparent text-zinc-500 border-white/8 hover:border-white/20 hover:text-zinc-300'
             }`}
           >
             All ({totalTools})
@@ -260,23 +262,21 @@ export default function TechStack() {
                 onClick={() => setActiveCategory(
                   activeCategory === group.category ? null : group.category
                 )}
-                className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[9px] sm:text-[10px] font-black uppercase tracking-widest transition-all duration-200 border ${
+                className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 border ${
                   activeCategory === group.category
                     ? 'bg-white text-black border-white'
-                    : 'bg-transparent text-zinc-500 border-white/[0.08] hover:border-white/20 hover:text-zinc-300'
+                    : 'bg-transparent text-zinc-500 border-white/8 hover:border-white/20 hover:text-zinc-300'
                 }`}
               >
-                <span className="mr-1 sm:mr-1.5">{config?.icon}</span>
-                <span className="hidden sm:inline">{group.category}</span>
-                <span className="sm:hidden">{group.category.split(' ')[0]}</span>
-                {' '}({group.tools.length})
+                <span className="mr-1.5">{config?.icon}</span>
+                {group.category} ({group.tools.length})
               </button>
             );
           })}
         </motion.div>
 
-        {/* Category Cards - Bento Grid — NO layout prop, NO whileHover spring on chips */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        {/* Category Cards - Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {stack
             .filter(g => !activeCategory || g.category === activeCategory)
             .map((group, idx) => {
@@ -286,53 +286,58 @@ export default function TechStack() {
               return (
                 <motion.div 
                   key={group.category}
-                  initial={{ opacity: 0, y: 20 }}
+                  layout
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ delay: idx * 0.06, duration: 0.4, ease: 'easeOut' }}
-                  className={`group relative rounded-2xl md:rounded-3xl border border-white/[0.06] bg-white/[0.015] overflow-hidden hover:border-white/[0.12] transition-colors duration-300 ${
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className={`group relative rounded-3xl border border-white/6 bg-white/1.5 backdrop-blur-sm overflow-hidden hover:border-white/12 transition-all duration-700 ${
                     isLarge ? 'md:col-span-2' : ''
                   }`}
                 >
-                  {/* Card glow on hover — CSS only */}
-                  <div className={`absolute inset-0 bg-linear-to-br ${config.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-500`} />
+                  {/* Card glow on hover */}
+                  <div className={`absolute inset-0 bg-linear-to-br ${config.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700`} />
                   
                   {/* Accent dot */}
-                  <div className={`absolute top-5 right-5 md:top-6 md:right-6 w-2 h-2 rounded-full ${config.glow} opacity-40 group-hover:opacity-100 transition-opacity duration-300`} />
+                  <div className={`absolute top-6 right-6 w-2 h-2 rounded-full ${config.glow} opacity-40 group-hover:opacity-100 group-hover:shadow-lg transition-all duration-500`}
+                    style={{ boxShadow: 'none' }}
+                  />
 
-                  <div className="relative z-10 p-5 sm:p-6 md:p-8 lg:p-10">
+                  <div className="relative z-10 p-8 md:p-10">
                     {/* Category header */}
-                    <div className="flex items-center gap-2.5 md:gap-3 mb-5 md:mb-8">
-                      <span className={`text-lg md:text-xl ${config.accent}`}>{config.icon}</span>
+                    <div className="flex items-center gap-3 mb-8">
+                      <span className={`text-xl ${config.accent}`}>{config.icon}</span>
                       <div>
-                        <h3 className={`text-xs md:text-sm font-black uppercase tracking-wider ${config.accent}`}>
+                        <h3 className={`text-sm font-black uppercase tracking-wider ${config.accent}`}>
                           {group.category}
                         </h3>
-                        <span className="text-[8px] md:text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
+                        <span className="text-[9px] text-zinc-600 font-bold uppercase tracking-widest">
                           {group.tools.length} technologies
                         </span>
                       </div>
                     </div>
                     
-                    {/* Tools chips — CSS hover, removed backdrop-blur & whileHover spring */}
+                    {/* Tools as chips/pills */}
                     <motion.div 
                       variants={staggerContainer}
                       initial="hidden"
                       whileInView="visible"
-                      viewport={{ once: true, margin: "-30px" }}
-                      className="flex flex-wrap gap-1.5 sm:gap-2"
+                      viewport={{ once: true }}
+                      className="flex flex-wrap gap-2"
                     >
                       {group.tools.map((tool) => (
-                        <motion.span
+                        <motion.div
                           key={tool.name}
                           variants={chipVariant}
-                          className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-lg md:rounded-xl border cursor-default transition-transform duration-200 md:hover:-translate-y-0.5 active:scale-95 ${levelColors[tool.level]}`}
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border backdrop-blur-sm cursor-default transition-all duration-300 ${levelColors[tool.level]} hover:shadow-lg`}
                         >
-                          <span className="text-xs sm:text-sm font-bold tracking-tight">{tool.name}</span>
-                          <span className="text-[7px] sm:text-[8px] font-black uppercase tracking-wider opacity-60">
+                          <span className="text-sm font-bold tracking-tight">{tool.name}</span>
+                          <span className="text-[8px] font-black uppercase tracking-wider opacity-60">
                             {tool.level === "Expert" ? "★" : tool.level === "Advanced" ? "◆" : "●"}
                           </span>
-                        </motion.span>
+                        </motion.div>
                       ))}
                     </motion.div>
                   </div>
@@ -346,8 +351,8 @@ export default function TechStack() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.15, duration: 0.4 }}
-          className="flex flex-wrap justify-center gap-4 sm:gap-6 mt-8 md:mt-12 mb-6 md:mb-8"
+          transition={{ delay: 0.3 }}
+          className="flex flex-wrap justify-center gap-6 mt-12 mb-8"
         >
           {[
             { label: "Expert", symbol: "★", color: "text-cyan-400" },
@@ -356,23 +361,23 @@ export default function TechStack() {
           ].map((level) => (
             <div key={level.label} className="flex items-center gap-2">
               <span className={`text-xs ${level.color}`}>{level.symbol}</span>
-              <span className="text-[9px] sm:text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{level.label}</span>
+              <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">{level.label}</span>
             </div>
           ))}
         </motion.div>
 
         {/* Bottom CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 15 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.1, duration: 0.4 }}
-          className="mt-10 md:mt-16 flex justify-center"
+          transition={{ delay: 0.2 }}
+          className="mt-16 flex justify-center"
         >
           <div className="relative group cursor-default">
-            <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 via-violet-500/20 to-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative px-6 sm:px-8 py-3 sm:py-4 bg-white/[0.03] border border-white/[0.08] rounded-full group-hover:border-white/15 transition-colors duration-300">
-              <p className="text-[9px] sm:text-[10px] font-black text-zinc-400 uppercase tracking-[0.3em] sm:tracking-[0.4em] group-hover:text-zinc-300 transition-colors">
+            <div className="absolute inset-0 bg-linear-to-r from-cyan-500/20 via-violet-500/20 to-cyan-500/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="relative px-8 py-4 bg-white/3 border border-white/8 rounded-full backdrop-blur-md group-hover:border-white/15 transition-all duration-500">
+              <p className="text-[10px] font-black text-zinc-400 uppercase tracking-[0.4em] group-hover:text-zinc-300 transition-colors">
                 Continuous Learning — Innovation — Speed
               </p>
             </div>
@@ -382,10 +387,7 @@ export default function TechStack() {
 
       <style jsx global>{`
         .stroke-text { -webkit-text-stroke: 2px rgba(255,255,255,0.15); }
-        @media (max-width: 640px) {
-          .stroke-text { -webkit-text-stroke: 1px rgba(255,255,255,0.15); }
-        }
       `}</style>
     </section>
   );
-}
+} 

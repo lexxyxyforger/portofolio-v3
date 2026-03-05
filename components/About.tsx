@@ -285,7 +285,7 @@ export default function AboutPage() {
                   The Persona
                 </span>
                 <p className="text-xl md:text-2xl lg:text-3xl font-medium leading-[1.2] tracking-tight text-zinc-300">
-                  Saya adalah seorang <span className="text-white font-bold italic">Fullstack Craftsman</span> yang berdedikasi dalam mengubah kompleksitas menjadi kesederhanaan. Fokus utama saya adalah membangun <span className="text-white">scalable product</span> dengan sentuhan <span className="text-cyan-400 font-black">identitas digital</span> yang mampu memberikan kesan mendalam dan tak terlupakan.
+                  Saya adalah seorang <span className="text-white font-bold italic">Fullstack Developer</span> yang berdedikasi dalam mengubah kompleksitas menjadi kesederhanaan. Fokus utama saya adalah membangun <span className="text-white">scalable product</span> dengan sentuhan <span className="text-cyan-400 font-black">identitas digital</span> yang mampu memberikan kesan mendalam dan tak terlupakan.
                 </p>
               </div>
             </motion.div>

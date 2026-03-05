@@ -24,3 +24,36 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* GPU layer promotion for smooth animations */
+main {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reduce heavy effects on mobile */
+@media (max-width: 768px) {
+  .backdrop-blur-xl { backdrop-filter: blur(8px) !important; }
+  .backdrop-blur-md { backdrop-filter: blur(6px) !important; }
+  .blur-\[150px\] { filter: blur(80px) !important; }
+  .blur-\[130px\] { filter: blur(70px) !important; }
+  .blur-\[120px\] { filter: blur(60px) !important; }
+  .blur-\[100px\] { filter: blur(50px) !important; }
+}
+
+/* Accessibility: respect user motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

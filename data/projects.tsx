@@ -115,6 +115,6 @@ export const projects: Project[] = [
     shortDesc: "Generate professional CVs in seconds.",
     fullDesc: "Aplikasi yang memungkinkan pengguna untuk membuat CV profesional dalam hitungan detik. Dengan berbagai template dan kemampuan personalisasi, pengguna bisa menghasilkan CV yang menarik dan sesuai dengan kebutuhan pasar kerja.",
     tech: ["TypeScript", "Next.js", "Tailwind"],
-    screenshots: ["/images/cv1.png", "/images/cv2.png"]
+    screenshots: ["/images/cv1.jpeg", "/images/cv2.jpeg"]
   },
 ];
